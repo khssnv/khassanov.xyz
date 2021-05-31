@@ -1,2 +1,4 @@
-# khassanov.me
-My web resources
+khassanov.xyz
+=============
+
+My web resources.
