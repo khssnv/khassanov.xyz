@@ -1,0 +1,43 @@
+baseURL: https://khassanov.xyz/
+title: khassanov.xyz
+paginate: 5
+theme: PaperMod
+author:
+  name: "Alisher A. Khassanov"
+  email: "a.khssnv@gmail.com"
+
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+
+languages:
+  en:
+    languageName: "English"
+    homeInfoParams:
+      Title: "Hi there \U0001F44B"
+      Content: |
+        - My name is Alisher. I'm a robotics software engineer.
+        - Welcome to my website.
+
+  ru:
+    langugeName: "Русский"
+    homeInfoParams:
+      Title: "Привет \U0001F44B"
+      Content: |
+        - Меня зовут Алишер. Я инженер-программист робототехники.
+        - Добро пожаловать на мой веб-сайт.
+
+params:
+  env: production
+  socialIcons:
+    - name: github
+      url: "https://github.com/khssnv/"
+    - name: linkedin
+      url: "https://www.linkedin.com/in/khssnv/"
+    - name: facebook
+      url: "https://www.facebook.com/khassan0v/"
+    - name: twitter
+      url: "https://twitter.com/khassan0v"
+    - name: medium
+      url: "https://khssnv.medium.com/"
