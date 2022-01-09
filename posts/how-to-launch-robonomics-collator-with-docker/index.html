@@ -1,0 +1,140 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>Robonomics Collator Docker | khassanov.xyz</title>
+<meta name=keywords content>
+<meta name=description content="Как запустить коллатор в Docker контейнере?
+В официальной инструкции по запуску коллатора предлагается собрать свой бинарный файл ноды Робономики или использовать опубликованный в последнем релизе. Использование Docker образа не предлагается, т. к. последнее обновление на Docker Hub было полгода назад. Это связано с проблемой сборки образа в CI, о которой уже опубликовано в Issue #232. Однако довольно просто повторить шаги которые делает CI на локальной машине чтобы сделать свой Docker образ.">
+<meta name=author content>
+<link rel=canonical href=https://khassanov.xyz/posts/how-to-launch-robonomics-collator-with-docker/>
+<link crossorigin=anonymous href=/assets/css/stylesheet.min.9f1d947375927e9847272b1f4e9be81336f539e513bf04d52cade31f81cad1af.css integrity="sha256-nx2Uc3WSfphHJysfTpvoEzb1OeUTvwTVLK3jH4HK0a8=" rel="preload stylesheet" as=style>
+<script defer crossorigin=anonymous src=/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5+kdJvBz5iKbt6B5PJI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=https://khassanov.xyz/favicon.ico>
+<link rel=icon type=image/png sizes=16x16 href=https://khassanov.xyz/favicon-16x16.png>
+<link rel=icon type=image/png sizes=32x32 href=https://khassanov.xyz/favicon-32x32.png>
+<link rel=apple-touch-icon href=https://khassanov.xyz/apple-touch-icon.png>
+<link rel=mask-icon href=https://khassanov.xyz/safari-pinned-tab.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<meta name=generator content="Hugo 0.91.2">
+<link rel=alternate hreflang=en href=https://khassanov.xyz/posts/how-to-launch-robonomics-collator-with-docker/>
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:#1d1e20;--entry:#2e2e33;--primary:rgba(255, 255, 255, 0.84);--secondary:rgba(255, 255, 255, 0.56);--tertiary:rgba(255, 255, 255, 0.16);--content:rgba(255, 255, 255, 0.74);--hljs-bg:#2e2e33;--code-bg:#37383e;--border:#333}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript><meta property="og:title" content="Robonomics Collator Docker">
+<meta property="og:description" content="Как запустить коллатор в Docker контейнере?
+В официальной инструкции по запуску коллатора предлагается собрать свой бинарный файл ноды Робономики или использовать опубликованный в последнем релизе. Использование Docker образа не предлагается, т. к. последнее обновление на Docker Hub было полгода назад. Это связано с проблемой сборки образа в CI, о которой уже опубликовано в Issue #232. Однако довольно просто повторить шаги которые делает CI на локальной машине чтобы сделать свой Docker образ.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://khassanov.xyz/posts/how-to-launch-robonomics-collator-with-docker/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-01-09T20:43:22+03:00">
+<meta property="article:modified_time" content="2022-01-09T20:43:22+03:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Robonomics Collator Docker">
+<meta name=twitter:description content="Как запустить коллатор в Docker контейнере?
+В официальной инструкции по запуску коллатора предлагается собрать свой бинарный файл ноды Робономики или использовать опубликованный в последнем релизе. Использование Docker образа не предлагается, т. к. последнее обновление на Docker Hub было полгода назад. Это связано с проблемой сборки образа в CI, о которой уже опубликовано в Issue #232. Однако довольно просто повторить шаги которые делает CI на локальной машине чтобы сделать свой Docker образ.">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://khassanov.xyz/posts/"},{"@type":"ListItem","position":2,"name":"Robonomics Collator Docker","item":"https://khassanov.xyz/posts/how-to-launch-robonomics-collator-with-docker/"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Robonomics Collator Docker","name":"Robonomics Collator Docker","description":"Как запустить коллатор в Docker контейнере?\nВ официальной инструкции по запуску коллатора предлагается собрать свой бинарный файл ноды Робономики или использовать опубликованный в последнем релизе. Использование Docker образа не предлагается, т. к. последнее обновление на Docker Hub было полгода назад. Это связано с проблемой сборки образа в CI, о которой уже опубликовано в Issue #232. Однако довольно просто повторить шаги которые делает CI на локальной машине чтобы сделать свой Docker образ.","keywords":[],"articleBody":"Как запустить коллатор в Docker контейнере?\nВ официальной инструкции по запуску коллатора предлагается собрать свой бинарный файл ноды Робономики или использовать опубликованный в последнем релизе. Использование Docker образа не предлагается, т. к. последнее обновление на Docker Hub было полгода назад. Это связано с проблемой сборки образа в CI, о которой уже опубликовано в Issue #232. Однако довольно просто повторить шаги которые делает CI на локальной машине чтобы сделать свой Docker образ.\nДля этого установите Rust: https://www.rust-lang.org/tools/install.\nДалее добавьте целевую систему “wasm32-unknown-unknown” и тулчейн “nightly-2021-11-02”.\nrustup target add wasm32-unknown-unknown rustup toolchain install nightly-2021-11-02 Склонируйте исходный код последней версии ноды Робономики.\ngit clone -b v1.4.0 https://github.com/airalab/robonomics.git Запустите сборку. Она может занять довольно много времени.\ncd robonomics cargo build -j 4 --locked --release Теперь можно собрать образ контейнера для Docker, благо Dockerfile уже написан разработчиками за нас.\ncd scripts/docker # переходим в директорию с Dockerfile cp ../../target/release/robonomics . # копируем собранный бинарный файл ноды docker build -f ./Dockerfile --build-arg RUSTC_WRAPPER= --build-arg PROFILE=release -t myrobonomics/robonomics:v1.4.0 . Готово! Теперь можно запустить ноду в докер-контейнере. Нужно только задать имя ноды и адрес коллатора на который будут поступать чаевые коллатора. Ещё стоит выделить отдельную папку для данных блокчейна, в неё же можно положить распакованный снапшот в случае если Вы хотите ускорить синхронизацию.\nmkdir data export NODE_NAME=\"NewNode\" export ACCOUNT_ADDRESS=\"YourAccountAddress\" docker run -d -v ./data:/data myrobonomics/robonomics:v1.4.0 \\ --parachain-id=2048 \\ --name=$NODE_NAME \\ --validator \\ --lighthouse-account=$ACCOUNT_ADDRESS \\ --telemetry-url=\"wss://telemetry.parachain.robonomics.network/submit/ 0\" \\ -- \\ --database=RocksDb \\ --unsafe-pruning \\ --pruning=1000 Если Вы хотите пропустить этап сборки, можете использовать собранный мной образ. Тогда запуск будет выглядеть следующим образом.\nmkdir data export NODE_NAME=\"NewNode\" export ACCOUNT_ADDRESS=\"YourAccountAddress\" docker run -d -v $(pwd)/data:/data khassanov/robonomics:v1.4.0 /usr/local/bin/robonomics \\ --parachain-id=2048 \\ --name=\"$NODE_NAME\" \\ --validator \\ --lighthouse-account=\"$ACCOUNT_ADDRESS\" \\ --telemetry-url=\"wss://telemetry.parachain.robonomics.network/submit/ 0\" \\ -- \\ --database=RocksDb \\ --unsafe-pruning \\ --pruning=1000 ","wordCount":"285","inLanguage":"en","datePublished":"2022-01-09T20:43:22+03:00","dateModified":"2022-01-09T20:43:22+03:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://khassanov.xyz/posts/how-to-launch-robonomics-collator-with-docker/"},"publisher":{"@type":"Organization","name":"khassanov.xyz","logo":{"@type":"ImageObject","url":"https://khassanov.xyz/favicon.ico"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=https://khassanov.xyz/ accesskey=h title="khassanov.xyz (Alt + H)">khassanov.xyz</a>
+<span class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+<ul class=lang-switch><li>|</li>
+<li>
+<a href=https://khassanov.xyz/ru/ title=Ru aria-label=Ru>Ru</a>
+</li>
+</ul>
+</span>
+</div>
+<ul id=menu>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<h1 class=post-title>
+Robonomics Collator Docker
+</h1>
+<div class=post-meta>January 9, 2022
+</div>
+</header>
+<div class=post-content><p>Как запустить коллатор в Docker контейнере?</p>
+<p>В <a href=https://github.com/airalab/robonomics-wiki/blob/master/docs/en/collators-tips-and-tricks.md>официальной инструкции</a> по запуску коллатора предлагается собрать свой бинарный файл ноды Робономики или использовать опубликованный в последнем релизе.
+Использование Docker образа не предлагается, т. к. последнее обновление на Docker Hub было полгода назад.
+Это связано с проблемой сборки образа в CI, о которой уже опубликовано в <a href=https://github.com/airalab/robonomics/issues/232>Issue #232</a>.
+Однако довольно просто повторить <a href=https://github.com/airalab/robonomics/blob/master/.github/workflows/release.yml#L8>шаги которые делает CI</a> на локальной машине чтобы сделать свой Docker образ.</p>
+<p>Для этого установите Rust: <a href=https://www.rust-lang.org/tools/install>https://www.rust-lang.org/tools/install</a>.</p>
+<p>Далее добавьте целевую систему &ldquo;wasm32-unknown-unknown&rdquo; и тулчейн &ldquo;nightly-2021-11-02&rdquo;.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console>rustup target add wasm32-unknown-unknown
+rustup toolchain install nightly-2021-11-02
+</code></pre></div><p>Склонируйте исходный код последней версии ноды Робономики.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console>git clone -b v1.4.0 https://github.com/airalab/robonomics.git
+</code></pre></div><p>Запустите сборку. Она может занять довольно много времени.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console>cd robonomics
+cargo build -j 4 --locked --release
+</code></pre></div><p>Теперь можно собрать образ контейнера для Docker, благо Dockerfile уже написан разработчиками за нас.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console>cd scripts/docker # переходим в директорию с Dockerfile
+cp ../../target/release/robonomics . # копируем собранный бинарный файл ноды
+docker build -f ./Dockerfile --build-arg RUSTC_WRAPPER= --build-arg PROFILE=release -t myrobonomics/robonomics:v1.4.0 .
+</code></pre></div><p>Готово!
+Теперь можно запустить ноду в докер-контейнере.
+Нужно только задать имя ноды и адрес коллатора на который будут поступать чаевые коллатора.
+Ещё стоит выделить отдельную папку для данных блокчейна, в неё же можно положить распакованный снапшот в случае если Вы хотите ускорить синхронизацию.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console>mkdir data
+export NODE_NAME=&#34;NewNode&#34;
+export ACCOUNT_ADDRESS=&#34;YourAccountAddress&#34;
+docker run -d -v ./data:/data myrobonomics/robonomics:v1.4.0 \
+  --parachain-id=2048 \
+  --name=$NODE_NAME \
+  --validator \
+  --lighthouse-account=$ACCOUNT_ADDRESS \
+  --telemetry-url=&#34;wss://telemetry.parachain.robonomics.network/submit/ 0&#34; \
+  -- \
+  --database=RocksDb \
+  --unsafe-pruning \
+  --pruning=1000
+<span style=color:#960050;background-color:#1e0010>
+</span></code></pre></div><p>Если Вы хотите пропустить этап сборки, можете использовать собранный мной образ.
+Тогда запуск будет выглядеть следующим образом.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console>mkdir data
+export NODE_NAME=&#34;NewNode&#34;
+export ACCOUNT_ADDRESS=&#34;YourAccountAddress&#34;
+docker run -d -v $(pwd)/data:/data khassanov/robonomics:v1.4.0 /usr/local/bin/robonomics \
+  --parachain-id=2048 \
+  --name=&#34;$NODE_NAME&#34; \
+  --validator \
+  --lighthouse-account=&#34;$ACCOUNT_ADDRESS&#34; \
+  --telemetry-url=&#34;wss://telemetry.parachain.robonomics.network/submit/ 0&#34; \
+  -- \
+  --database=RocksDb \
+  --unsafe-pruning \
+  --pruning=1000
+</code></pre></div>
+</div>
+<footer class=post-footer>
+</footer>
+</article>
+</main>
+<footer class=footer>
+<span>&copy; 2022 <a href=https://khassanov.xyz/>khassanov.xyz</a></span>
+<span>
+Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://git.io/hugopapermod rel=noopener target=_blank>PaperMod</a>
+</span>
+</footer>
+<a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a>
+<script>let menu=document.getElementById('menu');menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)},document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener("click",function(b){b.preventDefault();var a=this.getAttribute("href").substr(1);window.matchMedia('(prefers-reduced-motion: reduce)').matches?document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(a)}']`).scrollIntoView({behavior:"smooth"}),a==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${a}`)})})</script>
+<script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script>
+<script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove('dark'),localStorage.setItem("pref-theme",'light')):(document.body.classList.add('dark'),localStorage.setItem("pref-theme",'dark'))})</script>
+</body>
+</html>
