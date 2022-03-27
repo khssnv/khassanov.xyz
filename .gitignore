@@ -1,5 +1,8 @@
-/.idea/
+.idea/
+.vscode/
 /public/*
 !/public/.gitkeep
 /resources/*
 !/resources/.gitkeep
+htpasswd
+.hugo_build.lock
