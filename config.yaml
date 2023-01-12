@@ -17,7 +17,7 @@ languages:
     homeInfoParams:
       Title: "Hi there \U0001F44B"
       Content: |
-        - My name is Alisher. I'm a robotics software engineer.
+        - My name is Alisher. I'm a robotics and web3 software engineer.
         - Welcome to my website.
 
   ru:
@@ -25,7 +25,7 @@ languages:
     homeInfoParams:
       Title: "Привет \U0001F44B"
       Content: |
-        - Меня зовут Алишер. Я инженер-программист робототехники.
+        - Меня зовут Алишер. Я инженер-программист робототехники и веб3.
         - Добро пожаловать на мой веб-сайт.
 
 params:
